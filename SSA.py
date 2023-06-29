@@ -8,7 +8,7 @@ from niapy.algorithms import Algorithm
 from niapy.util.random import levy_flight
 import wrappers.cec17 as cec17
 import math
-import random
+
 
 class SquirrelSearchAlgorithm(Algorithm):
     Name = ['SquirrelSearchAlgorithm', 'SSA']
@@ -90,8 +90,7 @@ class SquirrelSearchAlgorithm(Algorithm):
 
         s_min = 1e-5 / (365 ** ((task.iters + 1) / (task.max_iters / 2.5)))
 
-        n = len(at)
-        sc = sum(np.sqrt(np.sum((new_population[i_at] - new_population[ht]) ** 2)) for i_at in at) / n
+        sc = sum(np.sqrt(np.sum((new_population[i_at] - new_population[ht]) ** 2)) for i_at in at) / len(at)
 
         if sc < s_min:
             new_population[nt_1] += levy_flight(size=(len(nt_1), task.dimension), rng=self.rng) * task.range
@@ -119,6 +118,8 @@ if __name__ == '__main__':
 
     np.random.seed(SEED)
 
+
+
     for func_id in range(1, 31):
 
         cec17.init("SSA_py", func_id, dim)
@@ -126,9 +127,11 @@ if __name__ == '__main__':
         problem = ProblemCEC2017(dimension=dim, lower=-100, upper=100)
         task = Task(problem, max_evals=10_000*dim, max_iters=10_000*dim/pop_size)
 
-        algo = SquirrelSearchAlgorithm(population_size=pop_size, seed=SEED)
+        algo = SquirrelSearchAlgorithm(population_size=pop_size, seed=SEED, scale=10)
         _, best_fitness = algo.run(task)
 
         print("Best SSA[F{}]: {:.4e}".format(func_id, best_fitness))
         # task.plot_convergence()
+
+
 
