@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/testsolis.dir/testsolis.cc.o -o testsolis  -Wl,-rpath,/home/esdavide/Desktop/Coding/MH/cec2017real/MH-CEC17 libcec17_test_func.so 
